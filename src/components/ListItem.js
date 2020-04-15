@@ -1,17 +1,27 @@
 import React, {Component} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View, LayoutAnimation, UIManager} from 'react-native';
 import {connect} from 'react-redux';
 import {CardSection} from '../common';
 import * as actions from '../actions';
 
+UIManager.setLayoutAnimationEnabledExperimental &&
+UIManager.setLayoutAnimationEnabledExperimental(true); // for LayoutAnimation.spring() to work in Android
+
 class ListItem extends Component{
+    componentDidUpdate() {
+        LayoutAnimation.spring();
+    }
 
     renderDescription() {
-        if(this.props.library.item.id === this.props.selectedLibraryId) {
+        const {library, expanded} = this.props;
+
+        if(expanded) {
             return (
-                <Text>
-                    {this.props.library.item.description}
-                </Text>
+                <CardSection>
+                    <Text style={{flex: 1}}>
+                        {library.item.description}
+                    </Text>
+                </CardSection>
             );
         }
     }
@@ -43,9 +53,9 @@ const styles = {
     }
 }
 
-const mapStateToProps = state => {
-    console.log(state.selectedLibraryId);
-    return { selectedLibraryId: state.selectedLibraryId };
+const mapStateToProps = (state, ownProps) => {
+    const expanded = state.selectedLibraryId === ownProps.library.item.id;
+    return { expanded };
 }
 
 export default connect(mapStateToProps, actions)(ListItem);
