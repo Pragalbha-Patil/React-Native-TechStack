@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Text, FlatList} from 'react-native';
 import {connect} from "react-redux";
 import ListItem from './ListItem';
-import {CardSection} from "../common";
 
 class LibraryList extends Component{
 
@@ -23,7 +22,7 @@ class LibraryList extends Component{
                 data={DATA}
                 //renderItem={(library) => console.log(library.item.title)}
                 renderItem={ (library) => <ListItem library={library} /> }
-                keyExtractor={library => library.id}
+                keyExtractor={library => library.id.toString()}
             />
         );
     }
@@ -36,7 +35,7 @@ function mapStateToProps(state) {
     // console.log(state);
     const { libraries } = state
     return {
-        libraries: libraries
+        libraries
     }
 }
 
